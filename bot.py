@@ -61,7 +61,12 @@ def get_eggs(token):
     data = {"token": token}
     response = requests.post(url, headers=headers, json=data)
     response_data = response.json()
-    eggs = response_data.get("data", [])[0].get("eggs", [])
+    eggs = []
+    for i in range(9):
+        try:
+            eggs.extend(response_data.get("data", [])[i].get("eggs", []))
+        except (IndexError, AttributeError):
+            continue
     return [egg.get("uid") for egg in eggs]
 
 def claim_egg_reward(token, egg_uid):
